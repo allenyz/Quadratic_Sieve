@@ -1,18 +1,24 @@
 #Tonelli-Shanks
 #https://rosettacode.org/w/index.php?title=Tonelli-Shanks_algorithm&oldid=338204#Python
 
+import numpy as np
+import math
+
 def legendre(a, p):
     return pow(a, (p - 1) // 2, p)
 
 def tonelli(n, p):
     assert legendre(n, p) == 1, "not a square (mod p)"
+    root = math.ceil(n**.5)
     q = p - 1
     s = 0
     while q % 2 == 0:
         q //= 2
         s += 1
     if s == 1:
-        return pow(n, (p + 1) // 4, p)
+        r = pow(n, (p + 1) // 4, p)
+        return (r-root) % p,(p-r - root) % p
+    z = 0
     for z in range(2, p):
         if p - 1 == legendre(z, p):
             break
@@ -32,14 +38,7 @@ def tonelli(n, p):
         c = (b * b) % p
         t = (t * c) % p
         m = i
-    return r
+    return (r-root % p),(p-r - root) % p
 
 if __name__ == '__main__':
-    ttest = [(10, 13), (56, 101), (1030, 10009), (44402, 100049),
-	     (665820697, 1000000009), (881398088036, 1000000000039),
-             (41660815127637347468140745042827704103445750172002, 10**50 + 577)]
-    for n, p in ttest:
-        r = tonelli(n, p)
-        assert (r * r - n) % p == 0
-        print("n = %d p = %d" % (n, p))
-        print("\t  roots : %d %d" % (r, p - r))
+    print(tonelli(227179,2))

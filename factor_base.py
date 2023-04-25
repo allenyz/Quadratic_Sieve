@@ -1,31 +1,27 @@
 #creates the factor base of N up to B
 
-def eulersCriterion(n, p): #!!!!!!MAKE MORE EFFICIENT
-    n = n % p
-    for i in range(2, p, 1):
-        if ((i * i) % p == n):
-            return True
-    return False
+def eulersCriterion(n, p):
+    
+    ls = pow(n, (p - 1) // 2, p) 
+    return ls if ls == 1 else -1
 
 def factorBase(n, b):
 
-    prime = [True for i in range(n+1)] 
+    prime = [True for i in range(b+1)] 
 
     p = 2
-    while(p * p <= n):
+    while(p * p <= b):
         if (prime[p] == True):
             
-            for i in range(p * p, n + 1, p):
+            for i in range(p * p, b + 1, p):
                 prime[i] = False
         p += 1
     
     c = []
     for p in range(2, b):
 
-        if prime[p] and eulersCriterion(n, p):
+        if (prime[p] and eulersCriterion(n, p) == 1):
             c.append(p)
             
-    #if 2 not in c: c.insert(0, 2)
+    if 2 not in c: c.insert(0, 2)
     return c
-
-print(factorBase(N, B))
